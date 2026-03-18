@@ -18,7 +18,6 @@
     justify-content: center;
     padding: 40px 20px;
   }
-  /* Password gate */
   #gate {
     text-align: center;
     max-width: 400px;
@@ -74,7 +73,6 @@
     margin-top: 12px;
     display: none;
   }
-  /* Main content (hidden until auth) */
   #content { display: none; width: 100%; }
   .logo-area {
     text-align: center;
@@ -97,7 +95,6 @@
     color: #888;
     font-size: 1rem;
     font-weight: 300;
-    letter-spacing: 0.5px;
   }
   .logo-area .prepared {
     margin-top: 24px;
@@ -106,10 +103,7 @@
     text-transform: uppercase;
     letter-spacing: 2px;
   }
-  .logo-area .prepared span {
-    color: #888;
-    font-weight: 500;
-  }
+  .logo-area .prepared span { color: #888; font-weight: 500; }
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -132,9 +126,7 @@
   .card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     height: 3px;
     background: #C9A84C;
     opacity: 0;
@@ -151,8 +143,7 @@
   .card p { font-size: 0.9rem; color: #888; line-height: 1.6; }
   .card .arrow {
     position: absolute;
-    bottom: 24px;
-    right: 24px;
+    bottom: 24px; right: 24px;
     color: #C9A84C;
     font-size: 1.2rem;
     opacity: 0;
@@ -172,7 +163,6 @@
 </head>
 <body>
 
-<!-- Password Gate -->
 <div id="gate">
   <h1>Bayly Sippel Safaris</h1>
   <div class="sub">Enter password to view the campaign proposal</div>
@@ -181,26 +171,25 @@
   <div class="error" id="err">Incorrect password. Please try again.</div>
 </div>
 
-<!-- Main Content -->
 <div id="content">
   <div class="logo-area">
     <h1>Bayly Sippel Safaris</h1>
     <div class="divider"></div>
-    <p>Meta Advertising Campaign Proposal — March 2026</p>
+    <p>Meta Advertising Campaign Proposal &mdash; March 2026</p>
     <div class="prepared">Prepared by <span>Rutted Buck Solutions</span></div>
   </div>
 
   <div class="cards">
     <a class="card" href="creatives.html">
       <div class="card-icon">&#127916;</div>
-      <h2>Ad Creatives & Copy</h2>
-      <p>Preview all 12 ad variations across 4 campaigns — static images, video clips, ad copy, and audience targeting for each package.</p>
+      <h2>Video Ads &amp; Creatives</h2>
+      <p>10 video ads (5 campaigns x A/B variants), value-add package cards, end cards, ad copy, and targeting for each package.</p>
       <span class="arrow">&rarr;</span>
     </a>
     <a class="card" href="campaign.html">
       <div class="card-icon">&#128202;</div>
       <h2>Campaign Architecture</h2>
-      <p>Full campaign structure breakdown — budget allocation, targeting strategy, funnel stages, and implementation roadmap.</p>
+      <p>Full campaign structure &mdash; 5 campaigns, budget allocation ($33/day), ad sets, targeting, lead forms, and optimization rules.</p>
       <span class="arrow">&rarr;</span>
     </a>
   </div>
@@ -211,7 +200,7 @@
 </div>
 
 <script>
-var H='e0bc614e4fd035a488619799853b075143deea596c477b8dc077e309c0fe42e9';
+var H='f1462fc6f48b0bc141d6f0fec8493e0339df5ef10058c09a60e82a60c05ee98d';
 function S(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
 function checkPw(){S(document.getElementById('pw').value).then(function(h){if(h===H){sessionStorage.setItem('bss_auth','1');show()}else{document.getElementById('err').style.display='block';document.getElementById('pw').value='';document.getElementById('pw').focus()}})}
 function show(){document.getElementById('gate').style.display='none';document.getElementById('content').style.display='block';document.body.style.justifyContent='flex-start'}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bayly Sippel Safaris — Ad Campaign Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .logo-area {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .logo-area h1 {
+    font-family: Georgia, serif;
+    font-size: 2.4rem;
+    color: #C9A84C;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .logo-area .divider {
+    width: 80px;
+    height: 2px;
+    background: #C9A84C;
+    margin: 16px auto;
+  }
+  .logo-area p {
+    color: #888;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+  .logo-area .prepared {
+    margin-top: 24px;
+    font-size: 0.8rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .logo-area .prepared span {
+    color: #888;
+    font-weight: 500;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    max-width: 800px;
+    width: 100%;
+  }
+  .card {
+    background: linear-gradient(135deg, #161616 0%, #111 100%);
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 32px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #C9A84C;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .card:hover {
+    border-color: #C9A84C44;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(201, 168, 76, 0.08);
+  }
+  .card:hover::before { opacity: 1; }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 0.9rem;
+    color: #888;
+    line-height: 1.6;
+  }
+  .card .arrow {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    color: #C9A84C;
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.3s ease;
+  }
+  .card:hover .arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .footer {
+    margin-top: 64px;
+    text-align: center;
+    color: #444;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+  .footer a {
+    color: #C9A84C;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="logo-area">
+  <h1>Bayly Sippel Safaris</h1>
+  <div class="divider"></div>
+  <p>Meta Advertising Campaign Proposal — March 2026</p>
+  <div class="prepared">Prepared by <span>Rutted Buck Solutions</span></div>
+</div>
+
+<div class="cards">
+  <a class="card" href="creatives.html">
+    <div class="card-icon">&#127916;</div>
+    <h2>Ad Creatives & Copy</h2>
+    <p>Preview all 12 ad variations across 4 campaigns — static images, video clips, ad copy, and audience targeting for each package.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+  <a class="card" href="campaign.html">
+    <div class="card-icon">&#128202;</div>
+    <h2>Campaign Architecture</h2>
+    <p>Full campaign structure breakdown — budget allocation, targeting strategy, funnel stages, and implementation roadmap.</p>
+    <span class="arrow">&rarr;</span>
+  </a>
+</div>
+
+<div class="footer">
+  Confidential &mdash; <a href="https://ruttedbucksolutions.com">Rutted Buck Solutions</a> &times; <a href="https://flowmatrixai.com">FlowMatrix AI</a>
+</div>
+
+</body>
+</html>

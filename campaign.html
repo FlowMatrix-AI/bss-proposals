@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bayly Sippel Safaris — Campaign Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 40px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 1px solid #C9A84C33;
+    border-radius: 16px;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #C9A84C;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 1rem;
+    color: #888;
+    font-weight: 300;
+  }
+  .header .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .header .meta-item {
+    text-align: center;
+  }
+  .header .meta-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #666;
+  }
+  .header .meta-item .value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #C9A84C;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 48px 0 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #C9A84C33;
+  }
+
+  /* Campaign cards */
+  .campaign-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .campaign-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .campaign-card:hover { border-color: #C9A84C55; }
+
+  .campaign-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .campaign-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .campaign-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-budget { background: #C9A84C22; color: #C9A84C; border: 1px solid #C9A84C44; }
+  .badge-objective { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f644; }
+  .badge-bid { background: #10b98122; color: #34d399; border: 1px solid #10b98144; }
+
+  /* Buffalo */
+  .campaign-card.buffalo .campaign-header { border-bottom: 2px solid #8B4513; }
+  .campaign-card.buffalo .campaign-icon { color: #8B4513; }
+  /* Sable */
+  .campaign-card.sable .campaign-header { border-bottom: 2px solid #6B21A8; }
+  .campaign-card.sable .campaign-icon { color: #6B21A8; }
+  /* Kudu */
+  .campaign-card.kudu .campaign-header { border-bottom: 2px solid #065f46; }
+  .campaign-card.kudu .campaign-icon { color: #065f46; }
+  /* Full Monty */
+  .campaign-card.fullmonty .campaign-header { border-bottom: 2px solid #b45309; }
+  .campaign-card.fullmonty .campaign-icon { color: #b45309; }
+  /* Retargeting */
+  .campaign-card.retarget .campaign-header { border-bottom: 2px solid #1d4ed8; }
+  .campaign-card.retarget .campaign-icon { color: #1d4ed8; }
+
+  /* Ad sets */
+  .adsets-container { padding: 0 24px 20px; }
+  .adset {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .adset-header {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e1e1e;
+    cursor: pointer;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .adset-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #ccc;
+  }
+  .adset-targeting {
+    font-size: 0.7rem;
+    color: #666;
+    max-width: 500px;
+  }
+
+  /* Ads */
+  .ads-list { padding: 12px 16px; }
+  .ad-item {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 12px;
+    align-items: start;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .ad-item:last-child { border-bottom: none; }
+  .ad-number {
+    width: 28px;
+    height: 28px;
+    background: #C9A84C22;
+    color: #C9A84C;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .ad-info {}
+  .ad-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #ddd;
+  }
+  .ad-headline {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 2px;
+  }
+  .ad-format {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    background: #ffffff08;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #777;
+    white-space: nowrap;
+    height: fit-content;
+  }
+
+  /* Lead form section */
+  .lead-form-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+  }
+  .lead-form-card h3 {
+    font-size: 0.95rem;
+    color: #C9A84C;
+    margin-bottom: 16px;
+  }
+  .form-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .form-field {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .form-field .field-label {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .form-field .field-value {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-top: 4px;
+  }
+  .form-field .field-type {
+    font-size: 0.65rem;
+    color: #C9A84C88;
+    margin-top: 2px;
+  }
+
+  /* Budget overview */
+  .budget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .budget-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .budget-card .package-name {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .budget-card .daily {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #C9A84C;
+    margin: 8px 0 4px;
+  }
+  .budget-card .monthly {
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+  .budget-card .pct {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 4px;
+  }
+  .budget-bar {
+    height: 4px;
+    background: #222;
+    border-radius: 2px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .budget-bar-fill {
+    height: 100%;
+    background: #C9A84C;
+    border-radius: 2px;
+  }
+
+  /* Optimization rules */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .rule-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .rule-card h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .rule-card.kill h4 { color: #ef4444; }
+  .rule-card.scale h4 { color: #22c55e; }
+  .rule-card.refresh h4 { color: #f59e0b; }
+  .rule-card.consolidate h4 { color: #3b82f6; }
+  .rule-card p {
+    font-size: 0.8rem;
+    color: #888;
+  }
+  .rule-card .threshold {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ccc;
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    border-radius: 6px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* Targeting */
+  .targeting-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  .targeting-table th, .targeting-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #1e1e1e;
+    font-size: 0.8rem;
+  }
+  .targeting-table th {
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
+  .targeting-table td { color: #ccc; }
+  .targeting-table tr:hover td { background: #1a1a1a; }
+
+  /* Naming convention */
+  .naming-box {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .naming-box h3 {
+    font-size: 0.85rem;
+    color: #C9A84C;
+    margin-bottom: 12px;
+  }
+  .naming-pattern {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9rem;
+    color: #C9A84C;
+    background: #1a1a1a;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .naming-example {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    color: #888;
+    padding: 4px 0;
+  }
+
+  /* Flow diagram */
+  .flow-section {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 32px;
+    margin-top: 24px;
+  }
+  .flow-section h3 {
+    font-size: 0.95rem;
+    color: #C9A84C;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    text-align: center;
+    padding: 16px 20px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    min-width: 140px;
+  }
+  .flow-step .step-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  .flow-step .step-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ddd;
+  }
+  .flow-step .step-desc {
+    font-size: 0.7rem;
+    color: #777;
+    margin-top: 4px;
+  }
+  .flow-arrow {
+    font-size: 1.2rem;
+    color: #C9A84C;
+    padding: 0 8px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding: 24px;
+    color: #444;
+    font-size: 0.75rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header h1 { font-size: 1.4rem; }
+    .campaign-header { flex-direction: column; align-items: flex-start; }
+    .flow-steps { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .campaign-card, .lead-form-card, .budget-card, .rule-card, .naming-box, .flow-section {
+      background: #f9f9f9; border-color: #ddd;
+    }
+    .campaign-name, .ad-name, h3, h4 { color: #000; }
+    .badge { border-color: #999; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>BAYLY SIPPEL SAFARIS</h1>
+    <div class="subtitle">Meta Ads Campaign Architecture &mdash; March 2026</div>
+    <div class="meta-row">
+      <div class="meta-item">
+        <div class="label">Platform</div>
+        <div class="value">Meta (FB + IG)</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Monthly Budget</div>
+        <div class="value">$1,000</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Daily Budget</div>
+        <div class="value">$33/day</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Objective</div>
+        <div class="value">Lead Gen</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Campaigns</div>
+        <div class="value">4 + Retarget</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Naming Convention -->
+  <div class="section-title">Naming Convention</div>
+  <div class="naming-box">
+    <h3>Campaign Level</h3>
+    <div class="naming-pattern">META_[Objective]_[Package]_[Audience]_[YYYYMM]</div>
+    <div class="naming-example">META_LEADS_Buffalo_HuntingInterests_202603</div>
+    <div class="naming-example">META_LEADS_Retargeting_WebVisitors_202604</div>
+    <br>
+    <h3>Ad Level</h3>
+    <div class="naming-pattern">[Package]_[Angle]_[Format]_[Version]</div>
+    <div class="naming-example">Buffalo_NoSizeLimits_Static_v1</div>
+    <div class="naming-example">Kudu_EveryonesDream_Video_v1</div>
+  </div>
+
+  <!-- Budget Overview -->
+  <div class="section-title">Budget Allocation</div>
+  <div class="budget-grid">
+    <div class="budget-card">
+      <div class="package-name">Buffalo Safari</div>
+      <div class="daily">$10/day</div>
+      <div class="monthly">$300/month</div>
+      <div class="pct">30% of total</div>
+      <div class="budget-bar"><div class="budget-bar-fill" style="width:30%"></div></div>
+    </div>
+    <div class="budget-card">
+      <div class="package-name">Kudu Focus</div>
+      <div class="daily">$8/day</div>
+      <div class="monthly">$240/month</div>
+      <div class="pct">24% of total</div>
+      <div class="budget-bar"><div class="budget-bar-fill" style="width:24%"></div></div>
+    </div>
+    <div class="budget-card">
+      <div class="package-name">The Full Monty</div>
+      <div class="daily">$8/day</div>
+      <div class="monthly">$240/month</div>
+      <div class="pct">24% of total</div>
+      <div class="budget-bar"><div class="budget-bar-fill" style="width:24%"></div></div>
+    </div>
+    <div class="budget-card">
+      <div class="package-name">Sable Safari</div>
+      <div class="daily">$7/day</div>
+      <div class="monthly">$220/month</div>
+      <div class="pct">22% of total</div>
+      <div class="budget-bar"><div class="budget-bar-fill" style="width:22%"></div></div>
+    </div>
+  </div>
+
+  <!-- Campaigns -->
+  <div class="section-title">Campaign Structure</div>
+  <div class="campaign-grid">
+
+    <!-- Campaign 1: Buffalo -->
+    <div class="campaign-card buffalo">
+      <div class="campaign-header">
+        <div class="campaign-name">Campaign 1: True Hunter Buffalo Safari</div>
+        <div class="campaign-badges">
+          <span class="badge badge-budget">$10/day</span>
+          <span class="badge badge-objective">Leads</span>
+          <span class="badge badge-bid">Lowest Cost</span>
+        </div>
+      </div>
+      <div class="adsets-container">
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 1: Hunting Interests (Broad)</div>
+            <div class="adset-targeting">US | M 30-65 | Hunting, Big-game, Elk, Deer, SCI, Outdoor Rec</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Buffalo_NoSizeLimits_Static_v1</div>
+                <div class="ad-headline">Hunt Cape Buffalo -- No Size Limits</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">2</div>
+              <div class="ad-info">
+                <div class="ad-name">Buffalo_TrueHunter_Static_v1</div>
+                <div class="ad-headline">True Hunter Buffalo Safari -- 7 Days</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">3</div>
+              <div class="ad-info">
+                <div class="ad-name">Buffalo_ValueAdd_Static_v1</div>
+                <div class="ad-headline">Book 2026 -- Free Impala Ram Included</div>
+              </div>
+              <div class="ad-format">Package Card</div>
+            </div>
+          </div>
+        </div>
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 2: African Safari Interest</div>
+            <div class="adset-targeting">US | M 35-65 | African Safari, Trophy Hunting, Cape Buffalo, DSC</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Buffalo_OldDuggaBoys_Static_v1</div>
+                <div class="ad-headline">Old Dugga Boys. On Foot. No Size Limits.</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">2</div>
+              <div class="ad-info">
+                <div class="ad-name">Buffalo_Testimonial_Static_v1</div>
+                <div class="ad-headline">"Best Outfitter in 7 Safaris" -- Client Review</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 2: Sable -->
+    <div class="campaign-card sable">
+      <div class="campaign-header">
+        <div class="campaign-name">Campaign 2: Sable Safari -- Africa's Prince</div>
+        <div class="campaign-badges">
+          <span class="badge badge-budget">$7/day</span>
+          <span class="badge badge-objective">Leads</span>
+          <span class="badge badge-bid">Lowest Cost</span>
+        </div>
+      </div>
+      <div class="adsets-container">
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 1: Hunting Interests (Broad)</div>
+            <div class="adset-targeting">US | M 30-65 | Same broad hunting interests</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Sable_NoPayPerInch_Static_v1</div>
+                <div class="ad-headline">Sable Safari -- No Pay Per Inch</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">2</div>
+              <div class="ad-info">
+                <div class="ad-name">Sable_AfricasPrince_Static_v1</div>
+                <div class="ad-headline">Africa's Prince -- 5 Day Sable Safari</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">3</div>
+              <div class="ad-info">
+                <div class="ad-name">Sable_ValueAdd_Static_v1</div>
+                <div class="ad-headline">Book 2026 -- Free Warthog Included</div>
+              </div>
+              <div class="ad-format">Package Card</div>
+            </div>
+          </div>
+        </div>
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 2: Trophy / Sable Interest</div>
+            <div class="adset-targeting">US | M 35-65 | Trophy Hunting, Sable, African Wildlife</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Sable_Testimonial_Static_v1</div>
+                <div class="ad-headline">No Size Limits. All Inclusive. $8,250.</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 3: Kudu -->
+    <div class="campaign-card kudu">
+      <div class="campaign-header">
+        <div class="campaign-name">Campaign 3: Kudu Focus Package</div>
+        <div class="campaign-badges">
+          <span class="badge badge-budget">$8/day</span>
+          <span class="badge badge-objective">Leads</span>
+          <span class="badge badge-bid">Lowest Cost</span>
+        </div>
+      </div>
+      <div class="adsets-container">
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 1: Hunting Interests (Broad)</div>
+            <div class="adset-targeting">US | M 30-65 | Same broad hunting interests</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Kudu_EveryonesDream_Static_v1</div>
+                <div class="ad-headline">The Kudu Hunt Every Hunter Dreams About</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">2</div>
+              <div class="ad-info">
+                <div class="ad-name">Kudu_5Species_Static_v1</div>
+                <div class="ad-headline">5 Species. 6 Days. All Inclusive.</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">3</div>
+              <div class="ad-info">
+                <div class="ad-name">Kudu_FreeObserver_Static_v1</div>
+                <div class="ad-headline">Book 2026 -- Your Observer Hunts FREE</div>
+              </div>
+              <div class="ad-format">Package Card</div>
+            </div>
+          </div>
+        </div>
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 2: Plains Game Interest</div>
+            <div class="adset-targeting">US | M 35-65 | Plains Game, African Hunting, Kudu, SA Travel</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Kudu_AllInclusive_Static_v1</div>
+                <div class="ad-headline">All Inclusive Kudu Safari -- $10,100</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 4: Full Monty -->
+    <div class="campaign-card fullmonty">
+      <div class="campaign-header">
+        <div class="campaign-name">Campaign 4: The Full Monty (Plains Game)</div>
+        <div class="campaign-badges">
+          <span class="badge badge-budget">$8/day</span>
+          <span class="badge badge-objective">Leads</span>
+          <span class="badge badge-bid">Lowest Cost</span>
+        </div>
+      </div>
+      <div class="adsets-container">
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 1: Buddy / Group Hunt Interest</div>
+            <div class="adset-targeting">US | M 30-65 | Hunting, Hunting Trip, Outdoor Rec, Group Travel</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">FullMonty_8Species_Static_v1</div>
+                <div class="ad-headline">8 Species. 7 Days. The Full Monty.</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">2</div>
+              <div class="ad-info">
+                <div class="ad-name">FullMonty_BringABuddy_Static_v1</div>
+                <div class="ad-headline">Bring a Buddy to Africa -- Hunt 8 Species</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+            <div class="ad-item">
+              <div class="ad-number">3</div>
+              <div class="ad-info">
+                <div class="ad-name">FullMonty_FreeObserver_Static_v1</div>
+                <div class="ad-headline">Book 2026 -- Your Observer Comes FREE</div>
+              </div>
+              <div class="ad-format">Package Card</div>
+            </div>
+          </div>
+        </div>
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 2: First Safari / Family</div>
+            <div class="adset-targeting">US | M 30-65 | Safari, Africa Travel, Adventure Travel, Wildlife</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">FullMonty_Lifetime_Static_v1</div>
+                <div class="ad-headline">Experience of a Lifetime -- African Safari</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign 5: Retargeting -->
+    <div class="campaign-card retarget">
+      <div class="campaign-header">
+        <div class="campaign-name">Campaign 5: Retargeting (Phase 2 -- April)</div>
+        <div class="campaign-badges">
+          <span class="badge badge-budget">$5-8/day</span>
+          <span class="badge badge-objective">Leads</span>
+          <span class="badge badge-bid">Lowest Cost</span>
+        </div>
+      </div>
+      <div class="adsets-container">
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 1: Website Visitors (30 days)</div>
+            <div class="adset-targeting">Custom Audience | Exclude existing leads</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Retarget_Brochure_Static_v1</div>
+                <div class="ad-headline">Still Thinking About Africa? Get Our Brochure.</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+          </div>
+        </div>
+        <div class="adset">
+          <div class="adset-header">
+            <div class="adset-name">Ad Set 2: Video Viewers (50%+ watch)</div>
+            <div class="adset-targeting">Custom Audience | 50%+ video view, 30 days</div>
+          </div>
+          <div class="ads-list">
+            <div class="ad-item">
+              <div class="ad-number">1</div>
+              <div class="ad-info">
+                <div class="ad-name">Retarget_LimitedDates_Static_v1</div>
+                <div class="ad-headline">2026 Dates Are Filling Up -- Book Now</div>
+              </div>
+              <div class="ad-format">Static 1:1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lead Form -->
+  <div class="section-title">Lead Form Configuration</div>
+  <div class="lead-form-card">
+    <h3>BSS_Lead_[Package]_v1</h3>
+    <div class="form-fields">
+      <div class="form-field">
+        <div class="field-label">Full Name</div>
+        <div class="field-value">Pre-filled from Facebook</div>
+        <div class="field-type">Required</div>
+      </div>
+      <div class="form-field">
+        <div class="field-label">Email</div>
+        <div class="field-value">Pre-filled from Facebook</div>
+        <div class="field-type">Required</div>
+      </div>
+      <div class="form-field">
+        <div class="field-label">Phone Number</div>
+        <div class="field-value">Pre-filled from Facebook</div>
+        <div class="field-type">Required</div>
+      </div>
+      <div class="form-field">
+        <div class="field-label">Which hunt interests you?</div>
+        <div class="field-value">Buffalo | Sable | Kudu | Full Monty | Custom</div>
+        <div class="field-type">Dropdown &bull; Required</div>
+      </div>
+      <div class="form-field">
+        <div class="field-label">When are you looking to hunt?</div>
+        <div class="field-value">2026 | 2027 | Just Exploring</div>
+        <div class="field-type">Dropdown &bull; Required</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead Flow -->
+  <div class="section-title">Lead Handoff Flow</div>
+  <div class="flow-section">
+    <h3>Lead Submission &rarr; Booking</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-icon">&#128203;</div>
+        <div class="step-title">Lead Form</div>
+        <div class="step-desc">User fills Meta lead form</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="step-icon">&#9889;</div>
+        <div class="step-title">GHL Webhook</div>
+        <div class="step-desc">Instant sync to CRM</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="step-icon">&#128231;</div>
+        <div class="step-title">Auto Email</div>
+        <div class="step-desc">Brochure + welcome</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="step-icon">&#128241;</div>
+        <div class="step-title">Notify D&M</div>
+        <div class="step-desc">WhatsApp alert</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="step-icon">&#128222;</div>
+        <div class="step-title">Personal Call</div>
+        <div class="step-desc">D&M reach out</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="step-icon">&#10003;</div>
+        <div class="step-title">Deposit</div>
+        <div class="step-desc">30% to book</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optimization Rules -->
+  <div class="section-title">Optimization Rules</div>
+  <div class="rules-grid">
+    <div class="rule-card kill">
+      <h4>3x Kill Rule</h4>
+      <p>Pause any ad set that spends 3x the target CPL with zero leads.</p>
+      <div class="threshold">Spend &gt; $105-$150 &amp; Leads = 0 &rarr; PAUSE</div>
+      <p>Review creative, targeting, and form before restarting.</p>
+    </div>
+    <div class="rule-card scale">
+      <h4>20% Scale Rule</h4>
+      <p>If CPL is 20%+ below target for 5+ days, increase budget by 20%.</p>
+      <div class="threshold">CPL &lt; $28 for 5 days &rarr; +20% budget</div>
+      <p>Wait 3-5 days between increases. Never more than 20% at once.</p>
+    </div>
+    <div class="rule-card refresh">
+      <h4>Creative Refresh</h4>
+      <p>Swap underperforming creatives every 2-3 weeks.</p>
+      <div class="threshold">Frequency &gt; 3.0 &rarr; Replace all creatives</div>
+      <p>Always have 2-3 backup creatives ready to deploy.</p>
+    </div>
+    <div class="rule-card consolidate">
+      <h4>Consolidation</h4>
+      <p>After Week 3, shift budget to top performers.</p>
+      <div class="threshold">Winner gets 40-50% of total budget</div>
+      <p>Keep minimum 2 campaigns running for audience diversity.</p>
+    </div>
+  </div>
+
+  <!-- Audience Targeting -->
+  <div class="section-title">Audience Targeting</div>
+  <div class="lead-form-card">
+    <table class="targeting-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Broad (Ad Set 1)</th>
+          <th>Targeted (Ad Set 2)</th>
+          <th>Retargeting</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Location</td>
+          <td>United States</td>
+          <td>United States</td>
+          <td>United States</td>
+        </tr>
+        <tr>
+          <td>Age</td>
+          <td>30-65</td>
+          <td>35-65</td>
+          <td>All (from pixel)</td>
+        </tr>
+        <tr>
+          <td>Gender</td>
+          <td>Male</td>
+          <td>Male</td>
+          <td>All (from pixel)</td>
+        </tr>
+        <tr>
+          <td>Interests</td>
+          <td>Hunting, Big-game, Elk, Deer, SCI, Outdoor Rec, Bow Hunting</td>
+          <td>African Safari, Trophy Hunting, Cape Buffalo, Dallas Safari Club</td>
+          <td>N/A (Custom Audience)</td>
+        </tr>
+        <tr>
+          <td>Audience Type</td>
+          <td>Interest-based</td>
+          <td>Interest-based</td>
+          <td>Website visitors, Video viewers</td>
+        </tr>
+        <tr>
+          <td>Placements</td>
+          <td>Advantage+ (all)</td>
+          <td>Advantage+ (all)</td>
+          <td>Advantage+ (all)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Prepared by Rutted Buck Solutions &bull; March 2026 &bull; Bayly Sippel Safaris Campaign Architecture
+  </div>
+
+</div>
+
+</body>
+</html>
